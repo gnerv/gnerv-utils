@@ -46,4 +46,37 @@
 
     </dependencies>
 
+    <licenses>
+        <!-- Apache许可证 -->
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <!-- SCM信息 -> git在github上托管 -->
+    <scm>
+        <connection>scm:git:git://github.com/gnerv/gnerv-utils.git</connection>
+        <developerConnection>scm:git:ssh://github.com/gnerv/gnerv-utils.git</developerConnection>
+        <url>https://github.com/gnerv/gnerv-utils/tree/master</url>
+    </scm>
+    <!-- 开发者信息 -->
+    <developers>
+        <developer>
+            <name>Gnerv LiGen</name>
+            <email>ligendwow@126.com</email>
+            <url>https://github.com/gnerv</url>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
 </project>
