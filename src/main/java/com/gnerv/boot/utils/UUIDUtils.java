@@ -2,14 +2,7 @@ package com.gnerv.boot.utils;
 
 import java.util.UUID;
 
-/**
- * <p>
- * UUID 工具类
- * </p>
- *
- * @author gnerv
- * @since 2018-05-09
- */
+
 public class UUIDUtils {
 
     /**

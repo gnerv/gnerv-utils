@@ -3,11 +3,6 @@ package com.gnerv.boot.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Gnerv LiGen
- * @description 日志工具类
- * @data 2019/5/31
- */
 public class LogUtil {
 
     private static Logger logger = LoggerFactory.getLogger(LogUtil.class);
@@ -18,9 +13,7 @@ public class LogUtil {
         getLogInfo(stackTraceElement);
     }
 
-    /**
-     * 输出日志所包含的信息
-     */
+
     public static String getLogInfo(StackTraceElement stackTraceElement) {
         StringBuilder logInfoStringBuilder = new StringBuilder();
         // 获取线程名
