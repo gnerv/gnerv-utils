@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExcelUtil {
+public class ExcelUtils {
 
     private final static String xls = "xls";
     private final static String xlsx = "xlsx";
