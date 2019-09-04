@@ -1,4 +1,4 @@
-package com.gnerv.boot.utils;
+package com.gnerv.boot.utils.log;
 
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;

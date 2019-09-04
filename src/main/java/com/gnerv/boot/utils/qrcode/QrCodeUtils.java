@@ -1,4 +1,4 @@
-package com.gnerv.boot.utils;
+package com.gnerv.boot.utils.qrcode;
 
 /**
  * <p>
@@ -9,10 +9,5 @@ package com.gnerv.boot.utils;
  * @since 2019/5/31
  */
 public class QrCodeUtils {
-
-
-
-
-
 
 }

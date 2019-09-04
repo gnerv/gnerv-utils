@@ -1,4 +1,4 @@
-package com.gnerv.boot.utils;
+package com.gnerv.boot.utils.uuid;
 
 import java.util.UUID;
 
