@@ -47,9 +47,9 @@ public @interface EntityExtend {
     String parameter() default "";
 
     // 对应主表字段名
-    String mColumn();
+    String mColumn() default "";
 
     // 对应从表字段名
-    String sColumn();
+    String sColumn() default "";
 
 }

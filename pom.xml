@@ -11,7 +11,7 @@
 
     <groupId>com.gnerv.boot</groupId>
     <artifactId>utils</artifactId>
-    <version>1.0.0-RELEASE</version>
+    <version>1.0.1-RELEASE</version>
     <name>gnerv-utils</name>
 
     <properties>

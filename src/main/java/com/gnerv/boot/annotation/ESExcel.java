@@ -19,13 +19,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ESExcel {
 
-    /**
-     * 列索引
-     */
     int columnIndex() default 0;
 
-    /**
-     * 列名称 如果使用名称 则Excel表格第一行 必须为名称
-     */
     String columnName() default "";
 }

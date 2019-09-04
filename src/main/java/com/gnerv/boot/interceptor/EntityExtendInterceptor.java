@@ -1,5 +1,8 @@
 package com.gnerv.boot.interceptor;
 
+import com.gnerv.boot.annotation.EntityExtend;
+import com.gnerv.boot.common.EntityExtendBean;
+import com.gnerv.boot.utils.mapper.MapperUtils;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -13,6 +16,7 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -28,19 +32,17 @@ public class EntityExtendInterceptor implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
         Object[] args = invocation.getArgs();
         MappedStatement ms = (MappedStatement) args[0];
-        List<ResultMap> resultMaps = ms.getResultMaps();
-        ResultMap resultMap = resultMaps.get(1);
-        List<ResultMapping> resultMappings = resultMap.getResultMappings();
-
-
-        //ResultMap.Builder builder = new ResultMap.Builder(new Configuration(), );
-
+        EntityExtend entityExtend = checkEntityExtend(ms);
+        if(StringUtils.isEmpty(entityExtend)){
+            return invocation.proceed();
+        }
+        MappedStatement mappedStatement = MapperUtils.buildMappedStatement(ms, entityExtend);
+        args[0] = mappedStatement;
         return invocation.proceed();
     }
 
     @Override
     public Object plugin(Object target) {
-        System.out.println(target);
         return target instanceof ResultSetHandler ? Plugin.wrap(target, this) : target;
     }
 
@@ -49,17 +51,14 @@ public class EntityExtendInterceptor implements Interceptor {
 
     }
 
-    public Object resultExtend(Object proceed){
-        if(proceed instanceof Integer){
-            return proceed;
+    public EntityExtend checkEntityExtend(MappedStatement ms){
+        EntityExtend entityExtend = null;
+        List<ResultMap> resultMaps = ms.getResultMaps();
+        for (ResultMap resultMap : resultMaps) {
+            Class<?> type = resultMap.getType();
+            entityExtend = EntityExtendBean.BEANS_MAP.get(type);
         }
-        if(proceed instanceof List){
-            List list = (List) proceed;
-        }
-        if(proceed instanceof Map){
-            Map map = (Map) proceed;
-        }
-        return proceed;
+        return entityExtend;
     }
 
 }

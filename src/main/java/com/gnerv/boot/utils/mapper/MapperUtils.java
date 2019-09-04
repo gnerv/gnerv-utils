@@ -1,5 +1,8 @@
 package com.gnerv.boot.utils.mapper;
 
+import com.gnerv.boot.annotation.EntityExtend;
+import com.gnerv.boot.common.EntityExtendBean;
+import com.gnerv.boot.utils.reflect.ReflectUtils;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
@@ -17,7 +20,10 @@ import java.util.List;
  */
 public class MapperUtils {
 
-    private MappedStatement buildMappedStatement(MappedStatement ms) {
+    public static String EXTEND = "extend";
+
+
+    public static MappedStatement buildMappedStatement(MappedStatement ms, EntityExtend entityExtend) {
         MappedStatement.Builder builder = new MappedStatement.Builder(ms.getConfiguration(), ms.getId(), ms.getSqlSource(), ms.getSqlCommandType());
         builder.resource(ms.getResource());
         builder.fetchSize(ms.getFetchSize());
@@ -25,7 +31,9 @@ public class MapperUtils {
         builder.keyGenerator(ms.getKeyGenerator());
         builder.timeout(ms.getTimeout());
         builder.parameterMap(ms.getParameterMap());
-        builder.resultMaps(ms.getResultMaps());
+
+        builder.resultMaps(buildResultMap(ms, entityExtend));
+
         builder.resultSetType(ms.getResultSetType());
         builder.cache(ms.getCache());
         builder.flushCacheRequired(ms.isFlushCacheRequired());
@@ -33,12 +41,12 @@ public class MapperUtils {
         return builder.build();
     }
 
-    private List<ResultMap> buildResultMap(MappedStatement ms) {
+    public static List<ResultMap> buildResultMap(MappedStatement ms, EntityExtend entityExtend) {
         List<ResultMap> resultMaps = ms.getResultMaps();
         ResultMap build = null;
         for (ResultMap resultMap : resultMaps) {
-            List<ResultMapping> composites = buildComposites(ms, resultMap);
-            List<ResultMapping> resultMappings = buildResultMapping(ms, resultMap, composites);
+            List<ResultMapping> composites = buildComposites(ms, resultMap, entityExtend);
+            List<ResultMapping> resultMappings = buildResultMappings(ms, resultMap, composites, entityExtend);
             build = new ResultMap.Builder(ms.getConfiguration(), resultMap.getId(), resultMap.getType(), resultMappings).build();
         }
         List lists = new ArrayList(resultMaps);
@@ -46,12 +54,12 @@ public class MapperUtils {
         return resultMaps;
     }
 
-    private List<ResultMapping> buildResultMapping(MappedStatement ms, ResultMap resultMap, List<ResultMapping> composites) {
+    public static List<ResultMapping> buildResultMappings(MappedStatement ms, ResultMap resultMap, List<ResultMapping> composites, EntityExtend entityExtend) {
         List<ResultMapping> resultMappings = resultMap.getResultMappings();
         String id = resultMap.getId();
         ResultMapping resultMapping =
-                new ResultMapping.Builder(ms.getConfiguration(), "extend", "id=b_id", List.class)
-                        .nestedQueryId("")
+                new ResultMapping.Builder(ms.getConfiguration(), EXTEND, entityExtend.parameter() + "=" + entityExtend.mColumn(), List.class)
+                        .nestedQueryId(entityExtend.select())
                         .composites(composites)
                         .build();
         List lists = new ArrayList(resultMappings);
@@ -59,11 +67,11 @@ public class MapperUtils {
         return lists;
     }
 
-    private List<ResultMapping> buildComposites(MappedStatement ms, ResultMap resultMap) {
+    public static List<ResultMapping> buildComposites(MappedStatement ms, ResultMap resultMap, EntityExtend entityExtend) {
         List<ResultMapping> resultMappings = resultMap.getResultMappings();
         String id = resultMap.getId();
         ResultMapping resultMapping =
-                new ResultMapping.Builder(ms.getConfiguration(), "extend", "id=b_id", Object.class)
+                new ResultMapping.Builder(ms.getConfiguration(), entityExtend.parameter(), entityExtend.mColumn(), Object.class)
                         .nestedQueryId("")
                         .build();
         List lists = new ArrayList(resultMappings);
